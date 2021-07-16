@@ -4,11 +4,10 @@ board = [['1','2','3'],['4','5','6'],['7','8','9']]
 occupied = []
 
 def boarddraw():
-
     print("\n\t "+board[0][0]+" | "+board[0][1]+" | "+board[0][2])
-    print("\t-----------")
+    print("\t---+---+---")
     print("\t "+board[1][0]+" | "+board[1][1]+" | "+board[1][2])
-    print("\t-----------")
+    print("\t---+---+---")
     print("\t "+board[2][0]+" | "+board[2][1]+" | "+board[2][2]+"\n")
 
 def xwin():
@@ -51,21 +50,9 @@ def owin():
         win2 = 1
     return win2
     
-def beginner(begin = ["name1","name2"]):
+def starter(begin = ["name1","name2"]):
     start = random.choice(begin)
     return start
-
-def oneplayer():
-    name1 = input("Please enter your name: ")
-    name2 = 'Computer'
-    print("Hello "+name1+"! You are playing a game against the "+name2)
-    input("Press Enter to see who begins!")
-    start = beginner()
-    if start == 'name1':
-        print(name1+" goes first!")
-    else:
-        print("Sorry, the "+name2+" goes first")
-    boarddraw()
 
 def play1(player1):
     print(player1+", please enter where you want to place an X")
@@ -97,6 +84,18 @@ def play1(player1):
         print("Please enter a number from 1 to 9")
         retry = 1
     return retry
+
+def oneplayer():
+    name1 = input("Please enter your name: ")
+    name2 = 'Computer'
+    print("Hello "+name1+"! You are playing a game against the "+name2)
+    input("Press Enter to see who begins!")
+    start = starter()
+    if start == 'name1':
+        print(name1+" goes first!")
+    else:
+        print("Sorry, the "+name2+" goes first")
+    boarddraw()
 
 def play2(player2):
     print(player2+", please enter where you want to place an O")
@@ -134,7 +133,7 @@ def twoplayer():
     name2 = input("Player 2, please enter your name: ")
     print("\nHello "+name1+" and "+name2+"!\n")
     input("Press Enter to see who begins!\n")
-    start = beginner()
+    start = starter()
     if start == 'name1':
         print(name1+" goes first!")
         player1 = name1
@@ -174,6 +173,7 @@ def twoplayer():
 print("\nWelcome to Tic Tac Toe! Coded by Jeroen Penders\n")
 
 win1, win2, player1, player2 = twoplayer()
+boarddraw()
 if win1 == 1:
     print("\n"+player1+" has won the game!!\n")
 elif win2 == 1:
