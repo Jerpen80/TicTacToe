@@ -1,190 +1,333 @@
 import random
+import time
 
-board = [['1','2','3'],['4','5','6'],['7','8','9']]
-occupied = []
+# Board in dictionary
+board = {1: ' ',2: ' ',3: ' ',4: ' ',5: ' ',6: ' ',7: ' ',8: ' ',9: ' '}
 
-def boarddraw():
-    print("\n\t "+board[0][0]+" | "+board[0][1]+" | "+board[0][2])
+# Determines who starts
+def start(starter = ['p1','p2']):
+    starter = random.choice(starter)
+    return starter
+
+# How to play
+def manual():
+    print("The numbers of the positions are as follows:")
+    print("\n\t 1 | 2 | 3")
     print("\t---+---+---")
-    print("\t "+board[1][0]+" | "+board[1][1]+" | "+board[1][2])
+    print("\t 4 | 5 | 6")
     print("\t---+---+---")
-    print("\t "+board[2][0]+" | "+board[2][1]+" | "+board[2][2]+"\n")
+    print("\t 7 | 8 | 9")
 
-def xwin():
-    win1 = 0
-    if board[0] == ['X','X','X']:
-        win1 = 1
-    elif board[1] == ['X','X','X']:
-        win1 = 1
-    elif board[2] == ['X','X','X']:
-        win1 = 1
-    elif board[0][0] + board[1][0] + board[2][0] == 'XXX':
-        win1 = 1
-    elif board[0][1] + board[1][1] + board[2][1] == 'XXX':
-        win1 = 1
-    elif board[0][2] + board[1][2] + board[2][2] == 'XXX':
-        win1 = 1
-    elif board[0][0] + board[1][1] + board[2][2] == 'XXX':
-        win1 = 1
-    elif board[0][2] + board[1][1] + board[2][0] == 'XXX':
-        win1 = 1
-    return win1
+# Draw the board
+def boarddraw(board):
+    print("\n\t "+board[1]+" | "+board[2]+" | "+board[3])
+    print("\t---+---+---")
+    print("\t "+board[4]+" | "+board[5]+" | "+board[6])
+    print("\t---+---+---")
+    print("\t "+board[7]+" | "+board[8]+" | "+board[9]+"\n")
 
-def owin():
-    win2 = 0
-    if board[0] == ['O','O','O']:
-        win2 = 1
-    elif board[1] == ['O','O','O']:
-        win2 = 1
-    elif board[2] == ['O','O','O']:
-        win2 = 1
-    elif board[0][0] + board[1][0] + board[2][0] == 'OOO':
-        win2 = 1
-    elif board[0][1] + board[1][1] + board[2][1] == 'OOO':
-        win2 = 1
-    elif board[0][2] + board[1][2] + board[2][2] == 'OOO':
-        win2 = 1
-    elif board[0][0] + board[1][1] + board[2][2] == 'OOO':
-        win2 = 1
-    elif board[0][2] + board[1][1] + board[2][0] == 'OOO':
-        win2 = 1
-    return win2
-    
-def starter(begin = ["name1","name2"]):
-    start = random.choice(begin)
-    return start
+# AI lines just for fun
+def fun():
+    choices = ["Geez, I can't think straight...","E = mc², so my next move must be.....",
+    "If my calculations are correct...","Information overload....","1 + 1 makes 2, so in that case...",
+    "Uhm..."]
+    line = random.choice(choices)
+    return line
 
-def play1(player1):
-    print(player1+", please enter where you want to place an X")
-    retry = 0
-    x = int(input("Enter number: "))
-    while x in occupied:
-        print("Already occupied...")
-        x = int(input("Enter number: "))
-    occupied.append(x)
-    if x == 1:
-        board[0][0] = 'X'
-    elif x == 2:
-        board[0][1] = 'X'
-    elif x == 3:
-        board[0][2] = 'X'
-    elif x == 4:
-        board[1][0] = 'X'
-    elif x == 5:
-        board[1][1] = 'X'
-    elif x == 6:
-        board[1][2] = 'X'
-    elif x == 7:
-        board[2][0] = 'X'    
-    elif x == 8:
-        board[2][1] = 'X'
-    elif x == 9:
-        board[2][2] = 'X'
+# AI lines also for fun
+def fun2():
+    choices = ["Ha, what do you think of this move!","Well, let's hope for the best..","I'm winning with this killer move!",
+    "Prepare to lose!","Gotcha!","I'm just gonna pick one.."]
+    line = random.choice(choices)
+    return line
+
+# Check if position is empty
+def empty(number):
+    if board[number] == ' ':
+        return True
     else:
-        print("Please enter a number from 1 to 9")
-        retry = 1
-    return retry
+        return False
 
-def oneplayer():
+# Placing mark on the board if DeepRetard is X
+def placemove1(letter, number):
+    if empty(number):
+        board[number] = letter
+        boarddraw(board) 
+        if winx():
+            print(name2+" wins!!!\n")
+            exit()
+        
+        if wino():
+            print(name1+" wins!!!\n")
+            exit()
+            
+        if draw():
+            print("It's a draw...\n")
+            exit()
+        return
+    else:
+        print("Position already taken")
+        number = int(input("Please select an empty position: "))
+        placemove1(letter, number)
+        return
+
+# Placing mark on the board if DeepRetard is O
+def placemove2(letter, number):
+    if empty(number):
+        board[number] = letter
+        boarddraw(board) 
+        if winx():
+            print(name1+" wins!!!\n")
+            exit()
+        
+        if wino():
+            print(name2+" wins!!!\n")
+            exit()
+            
+        if draw():
+            print("It's a draw...\n")
+            exit()
+        return
+    else:
+        print("Position already taken")
+        number = int(input("Please select an empty position: "))
+        placemove2(letter, number)
+        return
+
+# Checks if player 1 wins the game
+def winx():
+    if board[1] + board[2] + board[3] == 'XXX':
+        return True
+    elif board[4] + board[5] + board[6] == 'XXX':
+        return True
+    elif board[7] + board[8] + board[9] == 'XXX':
+        return True
+    elif board[1] + board[4] + board[7] == 'XXX':
+        return True
+    elif board[2] + board[5] + board[8] == 'XXX':
+        return True
+    elif board[3] + board[6] + board[9] == 'XXX':
+        return True
+    elif board[1] + board[5] + board[9] == 'XXX':
+        return True
+    elif board[3] + board[5] + board[7] == 'XXX':
+        return True
+    else:
+        return False
+
+# Checks if player 2 wins the game
+def wino():
+    if board[1] + board[2] + board[3] == 'OOO':
+        return True
+    elif board[4] + board[5] + board[6] == 'OOO':
+        return True
+    elif board[7] + board[8] + board[9] == 'OOO':
+        return True
+    elif board[1] + board[4] + board[7] == 'OOO':
+        return True
+    elif board[2] + board[5] + board[8] == 'OOO':
+        return True
+    elif board[3] + board[6] + board[9] == 'OOO':
+        return True
+    elif board[1] + board[5] + board[9] == 'OOO':
+        return True
+    elif board[3] + board[5] + board[7] == 'OOO':
+        return True
+    else:
+        return False
+
+# Checks if the game is a draw
+def draw():
+    for key in board.keys():
+        if (board[key] == ' '):
+            return False
+    return True
+
+# asks for player 1 input
+def player1move():
+    number = int(input("Enter the number of the position where you want to play an 'X': "))
+    placemove2(player1, number)
+    return
+
+# Asks for player 2 input
+def player2move():
+    number = int(input("Enter the number of the position where you want to play an 'O': "))
+    placemove2(player2, number)
+    return
+
+# DeepRetard marks the board after minimax algorithm if AI is player 1
+def compmove1():
+    bestscore = -100                                # Start with low score
+    bestmove = 0                                    # bestmove is 0 to create the variable
+    for key in board.keys():                        # for every position on the board do the following: 
+        if (board[key] == ' '):                     # If position is empty do the following
+            board[key] = player1                    # Place a mark, X in this case since AI is player 1 here 
+            score = deepretard1(board, 0, False)    # Check the score of the minimax algorithm
+            board[key] = ' '                        # Remove the mark so AI can try other moves for better scores
+            if (score > bestscore):                 # If score is higher than last bestscore (AI won more games with that move)     
+                bestscore = score                   # Adjust bestscore to see if there are better moves
+                bestmove = key                      # Go further with the move with the highest score
+    placemove1(player1, bestmove)                   # Place an X on the best position that came out of the algorithm
+    return
+
+# DeepRetard marks the board after minimax algorithm if AI is player 2
+def compmove2():
+    bestscore = -100
+    bestmove = 0
+    for key in board.keys():
+        if (board[key] == ' '):
+            board[key] = player2
+            score = deepretard2(board, 0, False)
+            board[key] = ' '
+            if (score > bestscore):
+                bestscore = score
+                bestmove = key
+    placemove2(player2, bestmove)
+    return
+
+# Deepretard minimax algorithm as player 1
+# Plays all possible outcomes of games to see which move is best
+# (Plays games against itself)
+def deepretard1(board, treedepth, max):
+    if (winx()):    				# Checks if win is True
+        return 1                    # Gets one point if outcome is postive(won) for deepretard
+    elif (wino()):					# Checks if opppent has won
+        return -1                   # Loses one point if game outcome is negative(lost) for deepretard
+    elif (draw()):					# Checks if the game ends in a draw
+        return 0                    # No points when draw
+    if (max):                       # If max is True, tries a move, if max is False, tries opponent move
+        bestscore = -100            # Score is reset to low
+        for key in board.keys():                                 # Tries every position
+            if (board[key] == ' '):                              # If empty do the following
+                board[key] = player1                             # Place an X
+                score = deepretard1(board, treedepth + 1, False) # Every move goes deeper in the tree of possible board states, False to make opponent move next
+                board[key] = ' '                                 # Position is reset to empty
+                if (score > bestscore):                          # If move is better than the previous best, last move is bestscore
+                    bestscore = score                            # Adjust bestscore to see if there are better moves
+        return bestscore
+    else:
+        bestscore = 100                                           # Same thing but for opponent but want to get a score as low as possible
+        for key in board.keys():
+            if (board[key] == ' '):
+                board[key] = player2
+                score = deepretard1(board, treedepth + 1, True)   # True to make next move for AI again
+                board[key] = ' '
+                if (score < bestscore):							  #If opponent wins lower the score(bad move)
+                    bestscore = score
+        return bestscore
+
+# Deepretard minimax algorithm as player 2 
+# Plays all possible outcomes of games to see which move is best
+def deepretard2(board, treedepth, max):
+    if (winx()):
+        return -1
+    elif (wino()):
+        return 1
+    elif (draw()):
+        return 0
+    if (max):
+        bestscore = -100
+        for key in board.keys():
+            if (board[key] == ' '):
+                board[key] = player2
+                score = deepretard2(board, treedepth + 1, False)
+                board[key] = ' '
+                if (score > bestscore):
+                    bestscore = score
+        return bestscore
+    else:
+        bestscore = 100
+        for key in board.keys():
+            if (board[key] == ' '):
+                board[key] = player1
+                score = deepretard2(board, treedepth + 1, True)
+                board[key] = ' '
+                if (score < bestscore):
+                    bestscore = score
+        return bestscore
+
+# Game start
+game = 0
+print("\nWelcome to Tic Tac Toe \t by Jeroen Penders\n")
+print("Enter 1 to play against DeepRetard(c) AI, 2 to play a 2 player game")
+while game not in ['1','2']:
+    game = input("Please enter 1 or 2: ")
+
+# 1 player game
+if game == '1':
     name1 = input("Please enter your name: ")
-    name2 = 'Computer'
-    print("Hello "+name1+"! You are playing a game against the "+name2)
-    input("Press Enter to see who begins!")
-    start = starter()
-    if start == 'name1':
-        print(name1+" goes first!")
+    name2 = "DeepRetard"
+    print("\nHello "+name1+"!\n")
+    print("So you think you can defeat DeepRetard(c)? Good luck!\n")
+    manual()
+    input("\nPress Enter to see who begins!")
+    starter = start()
+    if starter == 'p2':
+        print("\nDeepRetard(c) begins!")
+        boarddraw(board)
+        player1 = 'X'
+        player2 = 'O'
+        
+        while not wino() or winx():
+            print("Thinking...")
+            time.sleep(1)
+            print(fun())
+            time.sleep(2)
+            print(fun2())
+            time.sleep(1)
+            compmove1()
+            print(name1 + ", it's your turn now!\n")
+            player2move()
     else:
-        print("Sorry, the "+name2+" goes first")
-    boarddraw()
+        print("\nYou begin!")
+        boarddraw(board)
+        player1 = 'X'
+        player2 = 'O'
 
-def play2(player2):
-    print(player2+", please enter where you want to place an O")
-    retry = 0
-    x = int(input("Enter number: "))
-    while x in occupied:
-        print("Already occupied...")
-        x = int(input("Enter number: "))
-    occupied.append(x)
-    if x == 1:
-        board[0][0] = 'O'
-    elif x == 2:
-        board[0][1] = 'O'
-    elif x == 3:
-        board[0][2] = 'O'
-    elif x == 4:
-        board[1][0] = 'O'
-    elif x == 5:
-        board[1][1] = 'O'
-    elif x == 6:
-        board[1][2] = 'O'
-    elif x == 7:
-        board[2][0] = 'O'    
-    elif x == 8:
-        board[2][1] = 'O'
-    elif x == 9:
-        board[2][2] = 'O'
-    else:
-        print("Please enter a number from 1 to 9")
-        retry = 1
-    return retry
+        while not wino() or winx():
+            print(name1+", It's your turn now!\n")
+            player1move()
+            print("Thinking...")
+            time.sleep(1)
+            print(fun())
+            time.sleep(2)
+            print(fun2())
+            time.sleep(1)
+            compmove2()
 
-def twoplayer():
+# 2 player game
+elif game == '2':
     name1 = input("Player 1, please enter your name: ")
     name2 = input("Player 2, please enter your name: ")
     print("\nHello "+name1+" and "+name2+"!\n")
-    input("Press Enter to see who begins!\n")
-    start = starter()
-    if start == 'name1':
-        print(name1+" goes first!")
-        player1 = name1
-        player2 = name2
+    input("Press Enter to see who begins!")
+    starter = start()
+
+    if starter == 'p1':
+        print(name1 + " begins!")
+        boarddraw(board)
+        player1 = 'X'
+        player2 = 'O'
+
+        while not wino() or winx():
+            
+            print(name1+", It's your turn now!\n")
+            player1move()
+            print(name2+", It's your turn now!\n")
+            player2move()
     else:
-        print(name2+" goes first!")
-        player1 = name2
-        player2 = name1
-    win1 = 0
-    win2 = 0
-    while win1 == 0 or win2 == 0:
-        print(player1+", it's your turn now!")
-        boarddraw()
-        retry = play1(player1)
-        if retry == 1:
-            boarddraw()
-            print("foutje")
-            retry = play1(player1)
-        win1 = xwin()
-        if win1 == 1:
-            break
-        elif len(occupied) == 9:
-            break
-        print(player2+", it's your turn now!")
-        boarddraw()
-        retry = play2(player2)
-        if retry == 1:
-            boarddraw()
-            retry = play2(player2)
-        win2 = owin()
-        if win2 == 1:
-            break
-        elif len(occupied) == 9:
-            break
-    return win1, win2, player1, player2
+        print(name2+" begins!")
+        boarddraw(board)
+        player1 = 'X'
+        player2 = 'O'
 
-print("\nWelcome to Tic Tac Toe! Coded by Jeroen Penders\n")
-
-win1, win2, player1, player2 = twoplayer()
-boarddraw()
-if win1 == 1:
-    print("\n"+player1+" has won the game!!\n")
-elif win2 == 1:
-    print("\n"+player2+" has won the game!!\n")
-else:
-    print("\nThe game is a draw...\n")
-
-
-
-
-
-
+        while not wino() or winx():
+            
+            print(name2+", It's your turn now!\n")
+            player1move()
+            print(name1+", It's your turn now!\n")
+            player2move()
+        
+    
     
 
