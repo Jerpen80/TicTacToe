@@ -1,6 +1,18 @@
 import random
 import time
 
+# ASCII Art
+def art():
+    print("""
+ ______             ______                  ______                  
+/\__  _\__         /\__  _\                /\__  _\                 
+\/_/\ \/\_\    ___ \/_/\ \/    __      ___ \/_/\ \/   ___      __   
+   \ \ \/\ \  / ___\  \ \ \  / __ \   / ___\  \ \ \  / __ \  / __ \ 
+    \ \ \ \ \/\ \__/   \ \ \/\ \_\ \_/\ \__/   \ \ \/\ \_\ \/\  __/ 
+     \ \_\ \_\ \____\   \ \_\ \__/ \_\ \____\   \ \_\ \____/\ \____\ 
+      \/_/\/_/\/____/    \/_/\/__/\/_/\/____/    \/_/\/___/  \/____/""") 
+    print("\t\t\t\t\t\t   By Jeroen Penders\n")
+
 # Board in dictionary
 board = {1: ' ',2: ' ',3: ' ',4: ' ',5: ' ',6: ' ',7: ' ',8: ' ',9: ' '}
 
@@ -30,7 +42,7 @@ def boarddraw(board):
 def fun():
     choices = ["Geez, I can't think straight...","E = mc², so my next move must be.....",
     "If my calculations are correct...","Information overload....","1 + 1 makes 2, so in that case...",
-    "Uhm..."]
+    "Uhm...", "Please don't look at me while I'm thinking.."]
     line = random.choice(choices)
     return line
 
@@ -48,10 +60,10 @@ def empty(number):
     else:
         return False
 
-# Placing mark on the board if DeepRetard is X
-def placemove1(letter, number):
+# Placing mark on the board for player who is is X
+def placemove1(player1, number):
     if empty(number):
-        board[number] = letter
+        board[number] = player1
         boarddraw(board) 
         if winx():
             print(name2+" wins!!!\n")
@@ -68,13 +80,13 @@ def placemove1(letter, number):
     else:
         print("Position already taken")
         number = int(input("Please select an empty position: "))
-        placemove1(letter, number)
+        placemove1(player1, number)
         return
 
 # Placing mark on the board if DeepRetard is O
-def placemove2(letter, number):
+def placemove2(player2, number):
     if empty(number):
-        board[number] = letter
+        board[number] = player2
         boarddraw(board) 
         if winx():
             print(name1+" wins!!!\n")
@@ -91,7 +103,7 @@ def placemove2(letter, number):
     else:
         print("Position already taken")
         number = int(input("Please select an empty position: "))
-        placemove2(letter, number)
+        placemove2(player2, number)
         return
 
 # Checks if player 1 wins the game
@@ -145,13 +157,17 @@ def draw():
 
 # asks for player 1 input
 def player1move():
-    number = int(input("Enter the number of the position where you want to play an 'X': "))
+    number = 0
+    while number not in range(1,10):
+        number = int(input("Enter the number of the position where you want to play an 'X': "))
     placemove2(player1, number)
     return
 
 # Asks for player 2 input
 def player2move():
-    number = int(input("Enter the number of the position where you want to play an 'O': "))
+    number = 0
+    while number not in range(1,10):
+        number = int(input("Enter the number of the position where you want to play an 'O': "))
     placemove2(player2, number)
     return
 
@@ -248,8 +264,9 @@ def deepretard2(board, treedepth, max):
 
 # Game start
 game = 0
-print("\nWelcome to Tic Tac Toe \t by Jeroen Penders\n")
-print("Enter 1 to play against DeepRetard(c) AI, 2 to play a 2 player game")
+art()
+print("Enter 1 to play against DeepRetard(c) AI.")
+print("Enter 2 to play a 2 player game")
 while game not in ['1','2']:
     game = input("Please enter 1 or 2: ")
 
@@ -327,7 +344,3 @@ elif game == '2':
             player1move()
             print(name1+", It's your turn now!\n")
             player2move()
-        
-    
-    
-
