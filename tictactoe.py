@@ -5,7 +5,7 @@ import time
 def art():
     print("""
  ______             ______                  ______                  
-/\__  _\__         /\__  _\                /\__  _\                 
+/\__  _\__  With   /\__  _\   DeepRetard   /\__  _\     AI            
 \/_/\ \/\_\    ___ \/_/\ \/    __      ___ \/_/\ \/   ___      __   
    \ \ \/\ \  / ___\  \ \ \  / __ \   / ___\  \ \ \  / __ \  / __ \ 
     \ \ \ \ \/\ \__/   \ \ \/\ \_\ \_/\ \__/   \ \ \/\ \_\ \/\  __/ 
@@ -151,7 +151,7 @@ def wino():
 # Checks if the game is a draw
 def draw():
     for key in board.keys():
-        if (board[key] == ' '):
+        if board[key] == ' ':
             return False
     return True
 
@@ -176,11 +176,11 @@ def compmove1():
     bestscore = -100                                # Start with low score
     bestmove = 0                                    # bestmove is 0 to create the variable
     for key in board.keys():                        # for every position on the board do the following: 
-        if (board[key] == ' '):                     # If position is empty do the following
+        if board[key] == ' ':                     # If position is empty do the following
             board[key] = player1                    # Place a mark, X in this case since AI is player 1 here 
             score = deepretard1(board, 0, False)    # Check the score of the minimax algorithm
             board[key] = ' '                        # Remove the mark so AI can try other moves for better scores
-            if (score > bestscore):                 # If score is higher than last bestscore (AI won more games with that move)     
+            if score > bestscore:                 # If score is higher than last bestscore (AI won more games with that move)     
                 bestscore = score                   # Adjust bestscore to see if there are better moves
                 bestmove = key                      # Go further with the move with the highest score
     placemove1(player1, bestmove)                   # Place an X on the best position that came out of the algorithm
@@ -191,11 +191,11 @@ def compmove2():
     bestscore = -100
     bestmove = 0
     for key in board.keys():
-        if (board[key] == ' '):
+        if board[key] == ' ':
             board[key] = player2
             score = deepretard2(board, 0, False)
             board[key] = ' '
-            if (score > bestscore):
+            if score > bestscore:
                 bestscore = score
                 bestmove = key
     placemove2(player2, bestmove)
@@ -205,60 +205,60 @@ def compmove2():
 # Plays all possible outcomes of games to see which move is best
 # (Plays games against itself)
 def deepretard1(board, treedepth, max):
-    if (winx()):    				# Checks if win is True
+    if winx():    				# Checks if win is True
         return 1                    # Gets one point if outcome is postive(won) for deepretard
-    elif (wino()):					# Checks if opppent has won
+    elif wino():					# Checks if opppent has won
         return -1                   # Loses one point if game outcome is negative(lost) for deepretard
-    elif (draw()):					# Checks if the game ends in a draw
+    elif draw():					# Checks if the game ends in a draw
         return 0                    # No points when draw
-    if (max):                       # If max is True, tries a move, if max is False, tries opponent move
+    if max:                       # If max is True, tries a move, if max is False, tries opponent move
         bestscore = -100            # Score is reset to low
         for key in board.keys():                                 # Tries every position
-            if (board[key] == ' '):                              # If empty do the following
+            if board[key] == ' ':                              # If empty do the following
                 board[key] = player1                             # Place an X
                 score = deepretard1(board, treedepth + 1, False) # Every move goes deeper in the tree of possible board states, False to make opponent move next
                 board[key] = ' '                                 # Position is reset to empty
-                if (score > bestscore):                          # If move is better than the previous best, last move is bestscore
+                if score > bestscore:                          # If move is better than the previous best, last move is bestscore
                     bestscore = score                            # Adjust bestscore to see if there are better moves
         return bestscore
     else:
         bestscore = 100                                           # Same thing but for opponent but want to get a score as low as possible
         for key in board.keys():
-            if (board[key] == ' '):
+            if board[key] == ' ':
                 board[key] = player2
                 score = deepretard1(board, treedepth + 1, True)   # True to make next move for AI again
                 board[key] = ' '
-                if (score < bestscore):							  #If opponent wins lower the score(bad move)
+                if score < bestscore:							  #If opponent wins lower the score(bad move)
                     bestscore = score
         return bestscore
 
 # Deepretard minimax algorithm as player 2 
 # Plays all possible outcomes of games to see which move is best
 def deepretard2(board, treedepth, max):
-    if (winx()):
+    if winx():
         return -1
-    elif (wino()):
+    elif wino():
         return 1
-    elif (draw()):
+    elif draw():
         return 0
-    if (max):
+    if max:
         bestscore = -100
         for key in board.keys():
-            if (board[key] == ' '):
+            if board[key] == ' ':
                 board[key] = player2
                 score = deepretard2(board, treedepth + 1, False)
                 board[key] = ' '
-                if (score > bestscore):
+                if score > bestscore:
                     bestscore = score
         return bestscore
     else:
         bestscore = 100
         for key in board.keys():
-            if (board[key] == ' '):
+            if board[key] == ' ':
                 board[key] = player1
                 score = deepretard2(board, treedepth + 1, True)
                 board[key] = ' '
-                if (score < bestscore):
+                if score < bestscore:
                     bestscore = score
         return bestscore
 
